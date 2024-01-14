@@ -3,7 +3,6 @@ BIN := $(VENV)/bin
 PYTHON := $(BIN)/python
 SHELL := /bin/bash
 PROJECT := blango
-include .env
 
 .PHONY: help
 help: ## Show this help
@@ -21,8 +20,8 @@ freeze: ## Pin current dependencies
 	$(BIN)/pip freeze > requirements.txt
 
 migrate: ## Make and run migrations
-	$(PYTHON) $(PROJECT)/manage.py makemigrations
-	$(PYTHON)  $(PROJECT)/manage.py migrate
+	$(PYTHON) manage.py makemigrations
+	$(PYTHON) manage.py migrate
 
 
 db-shell: ## Access the Postgres Docker database interactively with psql. Pass in DBNAME=<name>.
@@ -30,14 +29,14 @@ db-shell: ## Access the Postgres Docker database interactively with psql. Pass i
 
 .PHONY: test
 test: ## Run tests
-	coverage run  $(PROJECT)/manage.py test blog  --keepdb  --verbosity=2  --failfast    --force-color
+	coverage run  manage.py test blog  --keepdb  --verbosity=2  --failfast    --force-color
 
 .PHONY: run
 run: ## Run the Django server
-	$(PYTHON)  $(PROJECT)/manage.py runserver
+	$(PYTHON)  manage.py runserver
 
 start: install migrate run ## Install requirements, apply migrations, then start development server
 
 report:
 	@echo "Code coverage report:"
-	coverage html2
+	coverage html
