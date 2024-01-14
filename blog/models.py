@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django_stubs_ext.db.models import TypedModelMeta
 
 class Tag(models.Model):
   # Model Attrs:
@@ -10,7 +11,14 @@ class Tag(models.Model):
     def __str__(self) -> str: 
       return str(self.value)
 
+    class Meta(TypedModelMeta):
+      
+    
 class Post(models.Model):
+    class STATUS(models.TextChoices):
+      DRAFT = "D", _("Draft")
+      APPROVED = "P", _("Published")
+      REJECTED = "W", _("Withdrawn")
   # Model Attrs:
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(""), on_delete=models.CASCADE)
     created_at = models.DateTimeField(_("Written On"), auto_now_add=True)
@@ -20,6 +28,7 @@ class Post(models.Model):
     slug = models.SlugField()
     summary = models.TextField(max_length=500)
     content = models.TextField()
+    status = models.CharField(max_length=1, choices=STATUS.choices, default=STATUS.DRAFT)
     tags = models.ManyToManyField(Tag, related_name="posts")
 
   # String Representation of Tag Model
