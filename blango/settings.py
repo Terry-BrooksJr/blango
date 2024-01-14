@@ -71,11 +71,11 @@ INSTALLED_APPS = [
 ]
 
 ROOT_URLCONF = "blango.urls"
-
+TEMPLATE_DIRS = [BASE_DIR / "templates"]
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": TEMPLATE_DIRS,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
