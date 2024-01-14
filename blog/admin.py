@@ -17,14 +17,14 @@ from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import ngettext
 
-from blog.models import Post, Tag
+from blog.models import Post, Tag, Comment
 
 
 # SECTION - Admin Models Defintions
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     date_hierarchy = 'created_at'
-    list_display = ['title', 'author', 'created_at', 'published_at']
+    list_display = ['title', 'author', 'created_at', 'slug', 'published_at']
     actions = ['make_published']
 
     # SECTION - Custom Admin Actions
@@ -62,3 +62,4 @@ class TagAdmin(admin.ModelAdmin):
 # SECTION - Model and Model Admin Registration 
 admin.site.register(model_or_iterable=Tag, admin_class=TagAdmin)
 admin.site.register(model_or_iterable=Post, admin_class=PostAdmin)
+admin.site.register(model_or_iterable=Comment)

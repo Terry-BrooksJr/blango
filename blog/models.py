@@ -22,6 +22,8 @@ from django.db.models.constraints import UniqueConstraint
 from django.db.models.functions import Lower
 from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 
 class Tag(models.Model):
@@ -33,7 +35,7 @@ class Tag(models.Model):
         return str(self.value)
 
     class Meta(TypedModelMeta):
-        db_table = "tags"
+        db_table = "blog_tags"
         order_with_respect_to = "value"
         indexes = [
             models.Index(fields=["value"], name="tag_value"),
@@ -41,6 +43,16 @@ class Tag(models.Model):
         constraints = [
       UniqueConstraint(Lower("value").desc(), name="unique_lower_name_tag")
 ]
+
+class Comment(models.Model):
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta(TypedModelMeta):
+        db_table = "blog_comments"
 
 class Post(models.Model):
     class STATUS(models.TextChoices):
@@ -58,13 +70,13 @@ class Post(models.Model):
     content = models.TextField()
     status = models.CharField(max_length=1, choices=STATUS.choices, default=STATUS.DRAFT) 
     tags = models.ManyToManyField(Tag, related_name="posts")
-
+    comments = GenericRelation(Comment)
     # String Representation of Tag Model
     def __str__(self) -> str:
         return str(self.title)
 
     class Meta(TypedModelMeta):
-        db_table = "posts"
+        db_table = "blog_posts"
         ordering = ["-last_modified_at"]
         indexes = [
             models.Index(fields=["author"], name="post_author"),

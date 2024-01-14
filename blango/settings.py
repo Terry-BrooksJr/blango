@@ -6,11 +6,11 @@ Django settings for blango project.
 import os
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key  
-
+from dotenv import load_dotenv
 import django_stubs_ext
 
 django_stubs_ext.monkeypatch()
-
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -96,8 +96,12 @@ WSGI_APPLICATION = "blango.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "PORT": 6767,
+        "HOST": "localhost",
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "USER": os.getenv("POSTGRES_USER")
     }
 }
 
