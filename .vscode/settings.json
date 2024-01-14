@@ -3,4 +3,6 @@
     "python.linting.pylintArgs": [
         "--rcfile=.pylintrc"
     ],
+    "pylint.args": ["load-plugins=pylint_django"],
+
 }
