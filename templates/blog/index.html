@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-{% load blog_extras %}
     <h2>Blog Posts</h2>
     <table class="table table-striped ">
         <thead>
@@ -16,10 +15,10 @@
     {% for post in posts %}
     <tr>
        <td>{{ post.title }}</td>
-        <td>{{ post.author | author_details:request.user }}</td>
+        <td>{{ post.author.first_name }} {{ post.author.last_name }}</td>
         <td>{{ post.summary|title  }}</td>
         <td>{{ post.created_at|date:"M, d Y" }}</td>
-        <td><a href="/blog/post/{{post.slug}}" class="btn btn-primary">{{ post.content|wordcount }} words</a></td>
+        <td><a href="{% url "post-detail" post.slug %}" class="btn btn-primary">{{ post.content|wordcount }} words</a></td>
       </tr>
     {% endfor %}
     </tbody>

@@ -5,7 +5,10 @@ from django import template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
+from django.db.models.query import QuerySet
+
 from typing import Union, Optional
+
 register = template.Library()
 
 @register.filter
@@ -34,3 +37,15 @@ def author_details(post_author: User, current_user: Optional[User]) -> str:
         return format_html('{}{}{}', prefix, name, suffix)
     except ObjectDoesNotExist as e:
         return " "
+
+@register.inclusion_tag("blog/post-list.html")
+def recent_posts(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
+    """Includes a list of most recent posts in blog/post-list.html."""
+    posts = Post.objects.exclude(pk=post.id).order_by("-created_at")[:5]
+    return {"title": "Recent Posts", "posts": posts}
+
+@register.inclusion_tag("blog/post-list.html")
+def recent_posts_by_author(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
+    """Includes a list of the author's most recent posts."""
+    posts = Post.objects.filter(author=post.author).exclude(pk=post.id).order_by("-created_at")[:5]
+    return {"title": f"Posts by {post.author.first_name}", "posts": posts}
