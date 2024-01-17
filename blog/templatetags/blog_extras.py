@@ -11,32 +11,35 @@ from typing import Union, Optional
 
 register = template.Library()
 
+
 @register.filter
-def author_details(post_author: User, current_user: Optional[User]) -> str: 
+def author_details(post_author: User, current_user: Optional[User]) -> str:
     """Returns a string containing the post's author details."""
-    if not isinstance(post_author,User):
-         return " "
+    if not isinstance(post_author, User):
+        return " "
     try:
         user_data = User.objects.get(pk=post_author.id)
         if post_author.id == current_user.id:
-            return format_html('<strong>Me!</strong>')
+            return format_html("<strong>Me!</strong>")
         if user_data.first_name and user_data.last_name:
-            name = escape(f"{escape(user_data.first_name)} {escape(user_data.last_name)}")
+            name = escape(
+                f"{escape(user_data.first_name)} {escape(user_data.last_name)}"
+            )
         elif user_data.first_name:
             name = escape(user_data.first_name)
-        else: 
+        else:
             name = escape(user_data.username)
-            
 
         if user_data.email:
             prefix = format_html('<a href="mailto:{}">', user_data.email)
             suffix = format_html("</a>")
-        else: 
+        else:
             prefix = ""
             suffix = ""
-        return format_html('{}{}{}', prefix, name, suffix)
+        return format_html("{}{}{}", prefix, name, suffix)
     except ObjectDoesNotExist as e:
         return " "
+
 
 @register.inclusion_tag("blog/post-list.html")
 def recent_posts(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
@@ -44,8 +47,13 @@ def recent_posts(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
     posts = Post.objects.exclude(pk=post.id).order_by("-created_at")[:5]
     return {"title": "Recent Posts", "posts": posts}
 
+
 @register.inclusion_tag("blog/post-list.html")
 def recent_posts_by_author(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
     """Includes a list of the author's most recent posts."""
-    posts = Post.objects.filter(author=post.author).exclude(pk=post.id).order_by("-created_at")[:5]
+    posts = (
+        Post.objects.filter(author=post.author)
+        .exclude(pk=post.id)
+        .order_by("-created_at")[:5]
+    )
     return {"title": f"Posts by {post.author.first_name}", "posts": posts}

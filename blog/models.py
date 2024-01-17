@@ -24,7 +24,7 @@ from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-   
+
 
 class Tag(models.Model):
     # Model Attrs:
@@ -41,8 +41,9 @@ class Tag(models.Model):
             models.Index(fields=["value"], name="tag_value"),
         ]
         constraints = [
-      UniqueConstraint(Lower("value").desc(), name="unique_lower_name_tag")
-]
+            UniqueConstraint(Lower("value").desc(), name="unique_lower_name_tag")
+        ]
+
 
 class Comment(models.Model):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -56,13 +57,19 @@ class Comment(models.Model):
     class Meta(TypedModelMeta):
         db_table = "blog_comments"
 
+
 class Post(models.Model):
     class STATUS(models.TextChoices):
         DRAFT = "D", _("Draft")
         APPROVED = "P", _("Published")
         REJECTED = "W", _("Withdrawn")
+
     # Model Attrs:
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Post Creator"), on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("Post Creator"),
+        on_delete=models.CASCADE,
+    )
     created_at = models.DateTimeField(_("Written On"), auto_now_add=True)
     last_modified_at = models.DateTimeField(_("Last Updated On"), auto_now=True)
     published_at = models.DateTimeField(_("Posted On"), blank=True, null=True)
@@ -70,9 +77,12 @@ class Post(models.Model):
     slug = models.SlugField(unique=True)
     summary = models.TextField(max_length=500)
     content = models.TextField()
-    status = models.CharField(max_length=1, choices=STATUS.choices, default=STATUS.DRAFT) 
+    status = models.CharField(
+        max_length=1, choices=STATUS.choices, default=STATUS.DRAFT
+    )
     tags = models.ManyToManyField(Tag, related_name="posts")
     comments = GenericRelation(Comment)
+
     # String Representation of Tag Model
     def __str__(self) -> str:
         return str(self.title)
@@ -82,5 +92,5 @@ class Post(models.Model):
         ordering = ["-last_modified_at"]
         indexes = [
             models.Index(fields=["author"], name="post_author"),
-            models.Index(fields=["status"], name="posts_status")
+            models.Index(fields=["status"], name="posts_status"),
         ]

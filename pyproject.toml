@@ -1,4 +1,4 @@
-[tool.poetry]
+3333333[tool.poetry]
 name = "blango"
 version = "0.1.0"
 description = ""
@@ -12,6 +12,9 @@ mypy = "1.7.1"
 django-stubs = "4.2.7"
 psycopg2-binary = "^2.9.9"
 python-dotenv = "^1.0.0"
+crispy-bootstrap5 = "^2023.10"
+django-configurations = "^2.5"
+dj-database-url = "^2.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.1"
@@ -19,6 +22,7 @@ isort = "^5.13.2"
 pre-commit = "^3.6.0"
 djlint = "^1.34.1"
 prospector = {extras = ["with-everything"], version = "^1.10.3"}
+coverage = "^7.4.0"
 
 
 [tool.poetry.group.typing.dependencies]
