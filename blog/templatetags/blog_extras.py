@@ -6,6 +6,7 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.db.models.query import QuerySet
+from django.utils.html import format_html
 
 from typing import Union, Optional
 
@@ -15,7 +16,7 @@ register = template.Library()
 @register.filter
 def author_details(post_author: User, current_user: Optional[User]) -> str:
     """Returns a string containing the post's author details."""
-    if not isinstance(post_author, User):
+    if not isinstance(post_author, User) or post_author is None or current_user is None:
         return " "
     try:
         user_data = User.objects.get(pk=post_author.id)

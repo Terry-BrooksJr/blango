@@ -24,7 +24,7 @@ from django.utils.translation import gettext_lazy as _
 from django_stubs_ext.db.models import TypedModelMeta
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-
+from django.utils.html import format_html
 
 class Tag(models.Model):
     # Model Attrs:
