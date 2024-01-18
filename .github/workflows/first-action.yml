@@ -8,7 +8,7 @@ jobs:
         uses: 'Actions/Checkout@v3'
       - name: Create VENV 
         run: |
-          python3 venv .  venv
+          python3 -m venv .  venv
       - name: Install Dep
         run: |
           source ./venv/bin/activate
