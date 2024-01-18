@@ -1,10 +1,18 @@
-name: First Workflow
+name: General Test and Deploy 
 on: workflow_dispatch
 jobs:
   first-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Prints greeting
-        run: echo "Hello World"
-      - name: Prints goodbye
-        run: echo "That's All Folks!"
+      - name: Get Code Checkout
+        uses: 'Actions/Checkout@v3'
+      - name: Install Dependencies 
+        run: |
+          python3 venv . 
+          source ./venv/bin/activate
+          pip install --upgrade pip
+          pip install poetry
+          poetry install 
+      - name: Run Tests
+        run: make testsgit 
+          

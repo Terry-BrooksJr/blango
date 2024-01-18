@@ -4,9 +4,8 @@ from django.http import HttpRequest, HttpResponse
 from blog.forms import CommentForm
 from blog.models import Post, Comment
 from django.contrib.contenttypes.models import ContentType
+from loguru import logger
 
-
-# Create your views here.
 def index(request: HttpRequest) -> HttpResponse:
     context = {}
     posts = Post.objects.filter(status="P")

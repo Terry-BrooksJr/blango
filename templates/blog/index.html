@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block title %} Posts {% endblock title %}
 {% block content %}
+<div class="d-flex" id="sign-in">
     <h2>Blog Posts</h2>
+    <div>
+      <a href="{% url 'login' %}" class="btn btn-primary">Sign In</a>
+      </div>
+    </div>
     <table class="table table-striped ">
         <thead>
             <tr class="table-dark ">

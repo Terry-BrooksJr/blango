@@ -8,7 +8,7 @@ from pathlib import Path
 from django.core.management.utils import get_random_secret_key  
 from dotenv import load_dotenv
 import django_stubs_ext
-from configurations import Configuration
+from configurations import Configuration, values
 
 
 django_stubs_ext.monkeypatch()
@@ -20,8 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-class Dev(Configuration):
-    DEBUG = True
+
+class Base(Configuration):
     SECRET_KEY = get_random_secret_key()
     DEBUG = False
     ALLOWED_HOSTS = ["*"]
@@ -34,9 +34,7 @@ class Dev(Configuration):
             "django.contrib.messages.middleware.MessageMiddleware",
             "django.middleware.clickjacking.XFrameOptionsMiddleware",
         ]
-
-
-    # Application definition
+    #SECTION -  Application definition
 
     INSTALLED_APPS = [
         "django.contrib.contenttypes",
@@ -53,7 +51,6 @@ class Dev(Configuration):
     ]
     CRISPY_TEMPLATE_PACK = "bootstrap5"
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
     ROOT_URLCONF = "blango.urls"
     TEMPLATE_DIRS = [BASE_DIR / "templates"]
     TEMPLATES = [
@@ -73,22 +70,6 @@ class Dev(Configuration):
     ]
 
     WSGI_APPLICATION = "blango.wsgi.application"
-    # Database
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB"),
-            "PORT": 6767,
-            "HOST": "localhost",
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-            "USER": os.getenv("POSTGRES_USER")
-        }
-    }
-
-
-    # Password validation
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
     AUTH_PASSWORD_VALIDATORS = [
         {
             "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -103,11 +84,6 @@ class Dev(Configuration):
             "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
         },
     ]
-
-
-    # Internationalization
-    # https://docs.djangoproject.com/en/3.2/topics/i18n/
-
     LANGUAGE_CODE = "en-us"
 
     TIME_ZONE = "UTC"
@@ -118,17 +94,9 @@ class Dev(Configuration):
 
     USE_TZ = True
 
-
-    # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
     STATIC_URL = "/static/"
-
-    # Default primary key field type
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
+    
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -170,4 +138,46 @@ class Dev(Configuration):
                 "propagate": False,
             },
         },
+    }
+
+class Dev(Base):
+    DEBUG = True
+       # Database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+
+
+class Prod(Dev):
+    DEBUG = True
+    
+    @classmethod
+    def pre_setup(cls):
+        super(Prod, cls).pre_setup()
+        if something.completely.different():
+            cls.DEBUG = True
+
+    @classmethod
+    def setup(cls):
+        super(Prod, cls).setup()
+        logging.info('production settings loaded: %s', cls)
+
+    @classmethod
+    def post_setup(cls):
+        super(Prod, cls).post_setup()
+        logging.debug("done setting up! \o/")
+    # Database
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "PORT": 6767,
+            "HOST": "localhost",
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "USER": os.getenv("POSTGRES_USER")
+        }
     }

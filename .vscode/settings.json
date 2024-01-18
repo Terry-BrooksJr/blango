@@ -4,5 +4,6 @@
         "--rcfile=.pylintrc"
     ],
     "pylint.args": ["load-plugins=pylint_django"],
+    "sqltools.useNodeRuntime": true
 
 }
