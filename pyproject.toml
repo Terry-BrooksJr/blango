@@ -6,7 +6,6 @@ authors = ["Terry A. Brooks, Jr <Terry.Brooks@Learnosity.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
 Django = "^5.0.1"
 mypy = "1.7.1"
 django-stubs = "4.2.7"
