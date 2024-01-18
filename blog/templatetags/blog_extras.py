@@ -45,7 +45,7 @@ def author_details(post_author: User, current_user: Optional[User]) -> str:
 @register.inclusion_tag("blog/post-list.html")
 def recent_posts(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
     """Includes a list of most recent posts in blog/post-list.html."""
-    posts = Post.objects.exclude(pk=post.id).order_by("-created_at")[:5]
+    posts = Post.objects.exclude(pk=post.id).order_by("-created_at").filter(status="P")[:5]
     return {"title": "Recent Posts", "posts": posts}
 
 
@@ -53,7 +53,7 @@ def recent_posts(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
 def recent_posts_by_author(post: Post) -> dict[str, Union[str, QuerySet[Post]]]:
     """Includes a list of the author's most recent posts."""
     posts = (
-        Post.objects.filter(author=post.author)
+        Post.objects.filter(author=post.author, status="P")
         .exclude(pk=post.id)
         .order_by("-created_at")[:5]
     )

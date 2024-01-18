@@ -98,64 +98,20 @@ class Base(Configuration):
     
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "verbose": {
-                "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-                "style": "{",
-            },
-            "simple": {
-                "format": "{asctime} | {levelname} | {message}",
-                "style": "{",
-            },
-        },
-        "filters": {
-            "require_debug_true": {
-                "()": "django.utils.log.RequireDebugTrue",
-            },
-        },
-        "handlers": {
-            "console": {
-                "level": "INFO",
-                "filters": ["require_debug_true"],
-                "class": "logging.StreamHandler",
-                "formatter": "simple",
-            },
-            "mail_admins": {
-                "level": "ERROR",
-                "class": "django.utils.log.AdminEmailHandler",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["console"],
-                "propagate": True,
-            },
-            "django.request": {
-                "handlers": ["mail_admins"],
-                "level": "ERROR",
-                "propagate": False,
-            },
-        },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "stream": "ext://sys.stdout"},
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     }
+}
 
 class Dev(Base):
     DEBUG = True
        # Database
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-
-
-
-class Prod(Dev):
-    DEBUG = True
-
-    # Database
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -166,3 +122,11 @@ class Prod(Dev):
             "USER": os.getenv("POSTGRES_USER")
         }
     }
+
+
+
+
+class Prod(Dev):
+    DEBUG = True
+
+    # Database

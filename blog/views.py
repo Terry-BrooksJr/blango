@@ -10,6 +10,7 @@ def index(request: HttpRequest) -> HttpResponse:
     context = {}
     posts = Post.objects.filter(status="P")
     context["posts"] = posts
+    logger.debug(f'Got {len(posts)}')
     return render(request, "blog/index.html", context)
 
 
@@ -26,6 +27,7 @@ def post_detail(request: HttpRequest, slug: str) -> HttpResponse:
                 new_comment.content_object = post
                 new_comment.creator = request.user
                 new_comment.save()
+                logger.info(f"Created comment on Post {post.pk} for user {request.user}")
                 return redirect(request.path_info)
         else:
             comment_form = CommentForm()
@@ -34,5 +36,6 @@ def post_detail(request: HttpRequest, slug: str) -> HttpResponse:
     context["post"] = post
     context["comments"] = comments
     context["form"] = comment_form
+    context['title'] = True
     return render(request, "blog/post-detail.html", context)
  

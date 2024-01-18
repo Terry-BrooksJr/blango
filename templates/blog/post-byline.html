@@ -1,4 +1,4 @@
 {% load blog_extras %}
-{% load humanize %} 
+{% load humanize %}
 <small>By {{ post.author|author_details:request.user }} published on {{ post.published_at| naturalday }} (Last Edited: {{ post.modified_at | naturalday | default:"Never Edited" }})</small>
 <hr class="uk-divider-icon"\>
