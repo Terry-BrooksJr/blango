@@ -154,22 +154,7 @@ class Dev(Base):
 
 class Prod(Dev):
     DEBUG = True
-    
-    @classmethod
-    def pre_setup(cls):
-        super(Prod, cls).pre_setup()
-        if something.completely.different():
-            cls.DEBUG = True
 
-    @classmethod
-    def setup(cls):
-        super(Prod, cls).setup()
-        logging.info('production settings loaded: %s', cls)
-
-    @classmethod
-    def post_setup(cls):
-        super(Prod, cls).post_setup()
-        logging.debug("done setting up! \o/")
     # Database
     DATABASES = {
         "default": {
