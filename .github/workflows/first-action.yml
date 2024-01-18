@@ -16,5 +16,7 @@ jobs:
           pip install poetry
           poetry install 
       - name: Run Tests
-        run: make test
+        run: |
+          source ./venv/bin/activate
+          make test
           
