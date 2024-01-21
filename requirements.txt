@@ -7,7 +7,7 @@ charset-normalizer==3.3.2
 cleo==2.1.0
 coverage==7.4.0
 crashtest==0.4.1
-distlib==0.3.8
+distlib
 Django==5.0.1
 django-configurations==2.5
 dulwich==0.21.7
