@@ -1,11 +1,12 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 from django.contrib.auth.models import User
 from blog.models import Post, Comment
 from blog.templatetags import blog_extras
 import datetime
 from django.utils.html import format_html
-
+from blog.views import post_detail
+from loguru import logger
 
 class AuthorDetailsFilterTestCase(TestCase):
     def setUp(self):
@@ -59,3 +60,4 @@ class AuthorDetailsFilterTestCase(TestCase):
             blog_extras.author_details(self.post_author, None),
             " "
         )
+        
