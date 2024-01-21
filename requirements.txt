@@ -1,3 +1,4 @@
+asgiref==3.7.2
 build==1.0.3
 CacheControl==0.13.1
 certifi==2023.11.17
@@ -7,6 +8,8 @@ cleo==2.1.0
 coverage==7.4.0
 crashtest==0.4.1
 distlib==0.3.8
+Django==5.0.1
+django-configurations==2.5
 dulwich==0.21.7
 fastjsonschema==2.19.1
 filelock==3.13.1
@@ -31,6 +34,7 @@ requests==2.31.0
 requests-toolbelt==1.0.0
 setuptools==69.0.3
 shellingham==1.5.4
+sqlparse==0.4.4
 tomlkit==0.12.3
 trove-classifiers==2023.11.29
 urllib3==2.1.0
