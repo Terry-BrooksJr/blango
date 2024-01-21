@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 class Base(Configuration):
     SECRET_KEY = get_random_secret_key()
     DEBUG = False
+    TEST_DATABASE_PREFIX = 'test'
     ALLOWED_HOSTS = ["*"]
     MIDDLEWARE = [
             "django.middleware.security.SecurityMiddleware",
@@ -91,17 +92,11 @@ class Base(Configuration):
       'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
   ], 
     LANGUAGE_CODE = "en-us"
-
     TIME_ZONE = "UTC"
-
     USE_I18N = True
-
     USE_L10N = True
-
     USE_TZ = True
-
     STATIC_URL = "/static/"
-    
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
     LOGGING = {
     "version": 1,
