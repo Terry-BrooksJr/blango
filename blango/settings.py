@@ -10,22 +10,18 @@ from dotenv import load_dotenv
 import django_stubs_ext
 from configurations import Configuration, values
 
-
 django_stubs_ext.monkeypatch()
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 class Base(Configuration):
     SECRET_KEY = get_random_secret_key()
     DEBUG = False
-    TEST_DATABASE_PREFIX = 'test'
-    ALLOWED_HOSTS = ["*"]
+    BASE_DIR = Path(__file__).resolve().parent.parent
     MIDDLEWARE = [
             "django.middleware.security.SecurityMiddleware",
             "django.contrib.sessions.middleware.SessionMiddleware",
@@ -85,12 +81,7 @@ class Base(Configuration):
             "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
         },
     ],
-    PASSWORD_HASHERS = [
-      'django.contrib.auth.hashers.Argon2PasswordHasher',
-      'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-      'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-      'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-  ], 
+
     LANGUAGE_CODE = "en-us"
     TIME_ZONE = "UTC"
     USE_I18N = True
@@ -109,7 +100,13 @@ class Base(Configuration):
         "level": "DEBUG",
     }
 }
-
+    PASSWORD_HASHERS = [
+      'django.contrib.auth.hashers.Argon2PasswordHasher',
+      'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+      'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+      'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+  ]
+    
 class Dev(Base):
     DEBUG = True
        # Database
